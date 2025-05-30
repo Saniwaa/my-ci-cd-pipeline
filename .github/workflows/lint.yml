@@ -1,18 +1,26 @@
-name: Lint YAML
+---
+name: CodeQL Analysis
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  lint:
+  analyze:
+    name: Analyze Code
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install yamllint
-        run: |
-          sudo apt-get install -y yamllint
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: [javascript]
 
-      - name: Lint YAML files
-        run: |
-          yamllint .
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
